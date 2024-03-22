@@ -1,4 +1,4 @@
-use std::fs;
+use std::{fs, path::PathBuf};
 
 use av1an_core::{context::Av1anContext, settings::EncodeArgs};
 use clap::Parser;
@@ -52,6 +52,16 @@ fn get_encode_args(args: Cli) -> anyhow::Result<EncodeArgs> {
     Ok(encode_args)
 }
 
+fn get_output_path(src: &PathBuf, dst: &PathBuf, path: &PathBuf) -> PathBuf {
+    let relative = path.strip_prefix(src).expect("Not a prefix");
+    dst.join(relative)
+}
+
+fn encode_file(cli: &Cli, input: PathBuf) {
+    let output_path = get_output_path(&cli.input, &cli.output, &input);
+    println!("input: {}, output: {}", input.to_string_lossy(), output_path.to_string_lossy());
+} 
+
 fn main() {
     let cli = Cli::parse();
 
@@ -67,8 +77,7 @@ fn main() {
         .log_to_stderr()
         .start().expect("Failed to run logger");
 
-
-    let files = WalkDir::new(cli.path)
+    let files = WalkDir::new(&cli.input)
         .follow_links(true)
         .into_iter()
         .filter_map(|e| e.ok())
@@ -82,5 +91,7 @@ fn main() {
             vec
         });
     
-    println!("{:#?}", files);
+    for file in files {
+        encode_file(&cli, file)
+    }
 }
