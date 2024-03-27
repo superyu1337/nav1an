@@ -9,6 +9,7 @@ edition = "2021"
 anyhow = "1.0.81"
 av1an-core = { git = "https://github.com/superyu1337/Av1an.git", version = "0.4.1" }
 clap = { version = "4.5.3", features = ["derive", "string"] }
+ffmpeg-the-third = "1.2.2"
 flexi_logger = { version = "0.28.0", default-features = false, features = ["colors"] }
 log = "0.4.21"
 serde = { version = "1.0.197", features = ["derive"] }

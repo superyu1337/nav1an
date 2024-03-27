@@ -27,7 +27,11 @@ pub struct Cli {
 
     /// Photon noise amount
     #[arg(long)]
-    pub ph: Option<usize>,
+    pub ph: Option<u8>,
+
+    /// Photon noise amount
+    #[arg(long, default_value_t = false)]
+    pub chroma_noise: bool,
 
     /// Film grain amount
     #[arg(long)]
